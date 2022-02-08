@@ -1,3 +1,88 @@
 .title {
-    background-color: lightblue;
+    text-align: center;
+    height: 100px;
+}
+
+.entity-title {
+    position: relative;
+    top: 30%;
+}
+
+.active {
+    background-color: lightgray;
+}
+
+.page-content {
+    position: absolute;
+    text-align: center;
+    left: 25%;
+    width: 50%;
+    height: 40%;
+    top: 20%;
+}
+
+.table-section {
+    position: absolute;
+    top: 62%;
+    left: 15%;
+    width: 70%;
+}
+
+#create-button {
+    position: absolute;
+    left: 50%;
+    top: 80%;
+}
+
+#filter-button {
+    position: absolute;
+    left: 35%;
+    top: 80%;
+}
+
+#update-button {
+    border-radius: 3px;
+    border: 2px solid black;
+}
+
+#update-button:hover {
+    border-radius: 3px;
+    border: 2px solid black;
+    background-color: green;
+    opacity: 0.5;
+}
+
+#delete-button {
+    border-radius: 3px;
+    border: 2px solid black;
+}
+
+#delete-button:hover {
+    border-radius: 3px;
+    border: 2px solid black;
+    background-color: red;
+    opacity: 0.5;
+}
+
+.form-section {
+    display: flex;
+    flex-flow: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-section label {
+    margin: 1% 4%;
+}
+  
+
+.form-section input {
+    vertical-align: middle;
+    margin: 5px 10px 5px 0;
+}
+
+.label-section {
+    vertical-align: middle;
+    margin: 5px 10px 5px 0;
+    width: 30%;
 }

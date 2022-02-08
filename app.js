@@ -4,7 +4,7 @@ setup
 // express
 var express = require('express');
 var app = express();
-PORT = process.env.PORT || 4246;
+PORT = process.env.PORT || 4249;
 var path = require('path');
 
 //var db = require('./db-connector');
