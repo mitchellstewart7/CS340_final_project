@@ -4,44 +4,49 @@ setup
 // express
 var express = require('express');
 var app = express();
-PORT = process.env.PORT || 4245;
+PORT = process.env.PORT || 4246;
 var path = require('path');
 
 //var db = require('./db-connector');
 
-app.get('/', function(req, res)
+app.get('/', function(req, res, next)
 {
     res.sendFile(path.join(__dirname+'/index.html'));
 });
 
-app.get('/', function(req, res)
+app.get('/items', function(req, res, next)
 {
     res.sendFile(path.join(__dirname+'/items.html'));
 });
 
-app.get('/', function(req, res)
+app.get('/customers', function(req, res, next)
 {
     res.sendFile(path.join(__dirname+'/customers.html'));
 });
 
-app.get('/', function(req, res)
+app.get('/employees', function(req, res, next)
 {
     res.sendFile(path.join(__dirname+'/employees.html'));
 });
 
-app.get('/', function(req, res)
+app.get('/orders', function(req, res, next)
 {
-    res.sendFile(path.join(__dirname+'/index.html'));
+    res.sendFile(path.join(__dirname+'/orders.html'));
 });
 
-app.get('/', function(req, res)
+app.get('/titles', function(req, res, next)
 {
-    res.sendFile(path.join(__dirname+'/index.html'));
+    res.sendFile(path.join(__dirname+'/titles.html'));
 });
 
-app.get('/', function(req, res)
+app.get('/departments', function(req, res, next)
 {
-    res.sendFile(path.join(__dirname+'/index.html'));
+    res.sendFile(path.join(__dirname+'/departments.html'));
+});
+
+app.get('/itemOrders', function(req, res, next)
+{
+    res.sendFile(path.join(__dirname+'/itemOrders.html'));
 });
 
 
