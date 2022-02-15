@@ -28,16 +28,24 @@
     width: 70%;
 }
 
+.create-filter-buttons {
+    margin-top: 30px;
+    display: flex;
+    flex-flow: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
 #create-button {
-    position: absolute;
-    left: 50%;
-    top: 80%;
+    vertical-align: middle;
+    margin: 5px 30px 5px 30px;
+    width: 15%;
 }
 
 #filter-button {
-    position: absolute;
-    left: 35%;
-    top: 80%;
+    vertical-align: middle;
+    margin: 5px 30px 5px 30px;
+    width: 15%;
 }
 
 #update-button {
@@ -79,6 +87,13 @@
 .form-section input {
     vertical-align: middle;
     margin: 5px 10px 5px 0;
+    width: 80%;
+}
+
+.form-section select {
+    vertical-align: middle;
+    margin: 5px 10px 5px 0;
+    width: 80%;
 }
 
 .label-section {
