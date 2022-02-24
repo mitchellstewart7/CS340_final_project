@@ -95,6 +95,104 @@ module.exports = function(){
         }
     });
 
+    function getEmployeesLike(req, res, mysql, context, complete) {
+        //sanitize the input as well as include the % character
+          var query = "SELECT employeeID, firstName, lastName, areaCode, phoneNumber, startDate, email, hoursWorked, title FROM Employees WHERE employeeID LIKE " + mysql.pool.escape(req.params.employeeID + '%') + "AND firstName LIKE " + mysql.pool.escape(req.params.firstName + '%') + "AND lastName LIKE " + mysql.pool.escape(req.params.lastName + '%') + "AND areaCode LIKE " + mysql.pool.escape(req.params.areaCode + '%') + "AND phoneNumber LIKE " + mysql.pool.escape(req.params.phoneNumber + '%') + "AND startDate LIKE " + mysql.pool.escape(req.params.startDate + '%') + "AND email LIKE " + mysql.pool.escape(req.params.email + '%') + "AND hoursWorked LIKE " + mysql.pool.escape(req.params.hoursWorked + '%') + "AND title LIKE " + mysql.pool.escape(req.params.title + '%');
+        console.log(query)
+  
+        mysql.pool.query(query, function(error, results, fields){
+              if(error){
+                  res.write(JSON.stringify(error));
+                  res.end();
+              }
+              for (var i = 0; i < results.length; i++)
+              {
+                  //console.log(results[i].orderDate);
+                  var datestr = new Date(results[i].startDate);
+  
+                  date = JSON.stringify(datestr);
+                  date = date.slice(1,11);
+                  results[i].startDate = date;
+                  //console.log(date);  
+              }
+              console.log(results);
+              context.employees = results;
+              complete();
+          });
+      }
+  
+      router.get('/:employeeID/:firstName/:lastName/:areaCode/:phoneNumber/:startDate/:email/:hoursWorked/:title', function(req, res){
+          console.log(req.body);
+          var callbackCount = 0;
+          var countEmpty = 0;
+          var context = {};
+          //context.jsscripts = ["deleteperson.js","filterpeople.js","searchpeople.js"];
+          var mysql = req.app.get('mysql');
+          if (req.params.employeeID == 'empty')
+          {
+              countEmpty++;
+              req.params.employeeID = '';
+          }
+          if (req.params.firstName == 'empty')
+          {
+              countEmpty++;
+              req.params.firstName = '';
+          }
+          if (req.params.lastName == 'empty')
+          {
+              countEmpty++;
+              req.params.lastName = '';
+          }
+          if (req.params.areaCode == 'empty')
+          {
+              countEmpty++;
+              req.params.areaCode = '';
+          }
+          if (req.params.phoneNumber == 'empty')
+          {
+              countEmpty++;
+              req.params.phoneNumber = '';
+          }
+          if (req.params.startDate == 'empty')
+          {
+              countEmpty++;
+              req.params.startDate = '';
+          }
+          if (req.params.email == 'empty')
+          {
+              countEmpty++;
+              req.params.email = '';
+          }
+          if (req.params.hoursWorked == 'empty')
+          {
+              countEmpty++;
+              req.params.hoursWorked = '';
+          }
+          if (req.params.title == 'empty')
+          {
+              countEmpty++;
+              req.params.title = '';
+          }
+          if (countEmpty == 9)
+          {
+              res.redirect('/employees');
+          }
+          else
+          {
+              getEmployeesLike(req, res, mysql, context, complete);
+              console.log("context:");
+              console.log(context);
+              //getPlanets(res, mysql, context, complete);
+              function complete(){
+                  callbackCount++;
+                  if(callbackCount >= 1){
+                      res.render('employees', context);
+                  }
+  
+              }
+          }
+      });
+
     // /*Display all people from a given homeworld. Requires web based javascript to delete users with AJAX*/
     // router.get('/filter/:homeworld', function(req, res){
     //     var callbackCount = 0;

@@ -51,6 +51,7 @@
               <div class="label-section">
                 <label for="departmentNumber">Department Number</label>
                 <select id="departmentNumber" name="departmentNumber">
+                  <option>Any</option>
                   <option>1</option>
                   <option>2</option>
                   <option>3</option>
@@ -95,6 +96,7 @@
                 <div class="label-section">
                     <label for="departmentNumber">Department Number</label>
                     <select id="update-departmentNumber" name="departmentNumber">
+                        <option>Any</option>
                         <option>1</option>
                         <option>2</option>
                         <option>3</option>
@@ -133,7 +135,7 @@
 
             <div class="create-filter-buttons">
               <button type="submit" form="items-form" onclick="itemsAlert()" id="items-create-button" class="create-button">Create Entry</button>
-              <button id="items-filter-button" class="filter-button">Filter Table</button>
+              <button onclick="searchItems()" id="items-filter-button" class="filter-button">Filter Table</button>
             </div>
           </div>
         </div>

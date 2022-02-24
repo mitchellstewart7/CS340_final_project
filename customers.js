@@ -95,6 +95,91 @@ module.exports = function(){
         }
     });
 
+    function getCustomersLike(req, res, mysql, context, complete) {
+        //sanitize the input as well as include the % character
+          var query = "SELECT customerID, firstName, lastName, email, phoneNumber, areaCode, accountStartDate FROM Customers WHERE customerID LIKE " + mysql.pool.escape(req.params.customerID + '%') + "AND firstName LIKE " + mysql.pool.escape(req.params.firstName + '%') + "AND lastName LIKE "+ mysql.pool.escape(req.params.lastName + '%') + "AND email LIKE "+ mysql.pool.escape(req.params.email + '%') + "AND phoneNumber LIKE "+ mysql.pool.escape(req.params.phoneNumber + '%') + "AND areaCode LIKE "+ mysql.pool.escape(req.params.areaCode + '%') + "AND accountStartDate LIKE "+ mysql.pool.escape(req.params.accountStartDate + '%');
+        console.log(query)
+  
+        mysql.pool.query(query, function(error, results, fields){
+              if(error){
+                  res.write(JSON.stringify(error));
+                  res.end();
+              }
+              for (var i = 0; i < results.length; i++)
+              {
+                  //console.log(results[i].orderDate);
+                  var datestr = new Date(results[i].accountStartDate);
+  
+                  date = JSON.stringify(datestr);
+                  date = date.slice(1,11);
+                  results[i].accountStartDate = date;
+                  //console.log(date);  
+              }
+              context.customers = results;
+              complete();
+          });
+      }
+  
+      router.get('/:customerID/:firstName/:lastName/:email/:phoneNumber/:areaCode/:accountStartDate', function(req, res){
+          console.log(req.body);
+          var callbackCount = 0;
+          var countEmpty = 0;
+          var context = {};
+          //context.jsscripts = ["deleteperson.js","filterpeople.js","searchpeople.js"];
+          var mysql = req.app.get('mysql');
+          if (req.params.customerID == 'empty')
+          {
+              countEmpty++;
+              req.params.customerID = '';
+          }
+          if (req.params.firstName == 'empty')
+          {
+              countEmpty++;
+              req.params.firstName = '';
+          }
+          if (req.params.lastName == 'empty')
+          {
+              countEmpty++;
+              req.params.lastName = '';
+          }
+          if (req.params.email == 'empty')
+          {
+              countEmpty++;
+              req.params.email = '';
+          }
+          if (req.params.phoneNumber == 'empty')
+          {
+              countEmpty++;
+              req.params.phoneNumber = '';
+          }
+          if (req.params.areaCode == 'empty')
+          {
+              countEmpty++;
+              req.params.areaCode = '';
+          }
+          if (req.params.accountStartDate == 'empty')
+          {
+              countEmpty++;
+              req.params.accountStartDate = '';
+          }
+          if (countEmpty == 7)
+          {
+              res.redirect('/customers');
+          }
+          else
+          {
+              getCustomersLike(req, res, mysql, context, complete);
+              //getPlanets(res, mysql, context, complete);
+              function complete(){
+                  callbackCount++;
+                  if(callbackCount >= 1){
+                      res.render('customers', context);
+                  }
+  
+              }
+          }
+      });
+
     // /*Display all people from a given homeworld. Requires web based javascript to delete users with AJAX*/
     // router.get('/filter/:homeworld', function(req, res){
     //     var callbackCount = 0;

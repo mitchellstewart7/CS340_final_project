@@ -104,3 +104,28 @@ UPDATE Orders SET customerID = :customerIDInput, employeeID = :employeeIDInput, 
 
 -- updates a row in ItemOrders to change orderID and itemID given the old orderID and itemID
 UPDATE ItemOrders SET orderID = :newOrderIDInput, itemID = :newItemIDInput WHERE orderID = :orderIDInput AND itemID = :itemIDInput;
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- this group of queries handles filtering of tables
+
+-- filters Orders table by any of its attributes
+SELECT orderID, customerID, employeeID, orderDate, totalPrice FROM Orders WHERE orderID LIKE :orderIDInput + '%' AND customerID LIKE :customerIDInput + '%' AND employeeID LIKE :employeeIDInput + '%' AND orderDate LIKE :orderDateInput + '%' AND totalPrice LIKE :totalPriceInput + '%';
+
+-- filters Titles table by any of its attributes
+SELECT title, payScale FROM Titles WHERE title LIKE :titleInput + '%' AND payScale LIKE payScaleInput + '%';
+
+-- filters Customers table by any of its attributes
+SELECT customerID, firstName, lastName, email, phoneNumber, areaCode, accountStartDate FROM Customers WHERE customerID LIKE :customerIDInput + '%' AND firstName LIKE :firstNameInput + '%' AND lastName LIKE :lastNameInput + '%' AND email LIKE emailInput + '%' AND phoneNumber LIKE :phoneNumberInput + '%' AND areaCode LIKE :areaCodeInput + '%' AND accountStartDate LIKE :accountStartDateInput + '%';
+
+-- filters Items table by any of its attributes
+SELECT itemID, itemName, departmentNumber, numberInStock, optimalStock, price FROM Items WHERE itemID LIKE :itemIDInput + '%' AND itemName LIKE :itemNameInput + '%' AND departmentNumber LIKE :departmentNumberInput + '%' AND numberInStock LIKE :numberInStockInput + '%' AND optimalStock LIKE :optimalStockInput + '%' AND price LIKE :priceInput + '%';
+
+-- filters ItemOrders table by any of its attributes
+SELECT orderID, itemID FROM ItemOrders WHERE orderID LIKE :orderIDInput + '%' AND itemID LIKE :itemIDInput + '%';
+
+-- filters Departments table by any of its attributes
+SELECT departmentNumber, departmentName FROM Departments WHERE departmentNumber LIKE :departmentNumberInput + '%' AND departmentName LIKE :departmentName + '%';
+
+-- filters Employees table by any of its attributes
+SELECT employeeID, firstName, lastName, areaCode, phoneNumber, startDate, email, hoursWorked, title FROM Employees WHERE employeeID LIKE :employeeIDInput + '%' AND firstName LIKE :firstNameInput + '%' AND lastName LIKE :lastNameInput + '%' AND areaCode LIKE :areaCodeInput + '%' AND phoneNumber LIKE :phoneNumberInput + '%' AND startDate LIKE :startDateInput + '%' AND email LIKE :emailInput + '%' AND hoursWorked LIKE :hoursWorkedInput + '%' AND title LIKE :titleInput + '%';

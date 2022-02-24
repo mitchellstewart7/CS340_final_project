@@ -85,6 +85,56 @@ module.exports = function(){
         }
     });
 
+    function getTitlesLike(req, res, mysql, context, complete) {
+        //sanitize the input as well as include the % character
+          var query = "SELECT title, payScale FROM Titles WHERE title LIKE " + mysql.pool.escape(req.params.title + '%') + "AND payScale LIKE " + mysql.pool.escape(req.params.payScale + '%');
+        console.log(query)
+  
+        mysql.pool.query(query, function(error, results, fields){
+              if(error){
+                  res.write(JSON.stringify(error));
+                  res.end();
+              }
+              context.titles = results;
+              complete();
+          });
+      }
+  
+      router.get('/:title/:payScale', function(req, res){
+          console.log(req.body);
+          var callbackCount = 0;
+          var countEmpty = 0;
+          var context = {};
+          //context.jsscripts = ["deleteperson.js","filterpeople.js","searchpeople.js"];
+          var mysql = req.app.get('mysql');
+          if (req.params.title == 'empty')
+          {
+              countEmpty++;
+              req.params.title = '';
+          }
+          if (req.params.payScale == 'empty')
+          {
+              countEmpty++;
+              req.params.payScale = '';
+          }
+          if (countEmpty == 2)
+          {
+              res.redirect('/titles');
+          }
+          else
+          {
+              getTitlesLike(req, res, mysql, context, complete);
+              //getPlanets(res, mysql, context, complete);
+              function complete(){
+                  callbackCount++;
+                  if(callbackCount >= 1){
+                      res.render('titles', context);
+                  }
+  
+              }
+          }
+      });
+
     // /*Display all people from a given homeworld. Requires web based javascript to delete users with AJAX*/
     // router.get('/filter/:homeworld', function(req, res){
     //     var callbackCount = 0;

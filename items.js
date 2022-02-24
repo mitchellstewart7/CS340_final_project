@@ -85,6 +85,76 @@ module.exports = function(){
         }
     });
 
+    function getItemsLike(req, res, mysql, context, complete) {
+        //sanitize the input as well as include the % character
+          var query = "SELECT itemID, itemName, departmentNumber, numberInStock, optimalStock, price FROM Items WHERE itemID LIKE " + mysql.pool.escape(req.params.itemID + '%') + "AND itemName LIKE " + mysql.pool.escape(req.params.itemName + '%') + "AND departmentNumber LIKE "+ mysql.pool.escape(req.params.departmentNumber + '%') + "AND numberInStock LIKE "+ mysql.pool.escape(req.params.numberInStock + '%') + "AND optimalStock LIKE "+ mysql.pool.escape(req.params.optimalStock + '%') + "AND price LIKE "+ mysql.pool.escape(req.params.price + '%');
+        console.log(query)
+  
+        mysql.pool.query(query, function(error, results, fields){
+              if(error){
+                  res.write(JSON.stringify(error));
+                  res.end();
+              }
+              context.items = results;
+              complete();
+          });
+      }
+  
+      router.get('/:itemID/:itemName/:departmentNumber/:numberInStock/:optimalStock/:price', function(req, res){
+          console.log(req.body);
+          var callbackCount = 0;
+          var countEmpty = 0;
+          var context = {};
+          //context.jsscripts = ["deleteperson.js","filterpeople.js","searchpeople.js"];
+          var mysql = req.app.get('mysql');
+          if (req.params.itemID == 'empty')
+          {
+              countEmpty++;
+              req.params.itemID = '';
+          }
+          if (req.params.itemName == 'empty')
+          {
+              countEmpty++;
+              req.params.itemName = '';
+          }
+          if (req.params.departmentNumber == 'empty')
+          {
+              countEmpty++;
+              req.params.departmentNumber = '';
+          }
+          if (req.params.numberInStock == 'empty')
+          {
+              countEmpty++;
+              req.params.numberInStock = '';
+          }
+          if (req.params.optimalStock == 'empty')
+          {
+              countEmpty++;
+              req.params.optimalStock = '';
+          }
+          if (req.params.price == 'empty')
+          {
+              countEmpty++;
+              req.params.price = '';
+          }
+          if (countEmpty == 6)
+          {
+              res.redirect('/items');
+          }
+          else
+          {
+              getItemsLike(req, res, mysql, context, complete);
+              //getPlanets(res, mysql, context, complete);
+              function complete(){
+                  callbackCount++;
+                  if(callbackCount >= 1){
+                      res.render('items', context);
+                  }
+  
+              }
+          }
+      });
+
     // /*Display all people from a given homeworld. Requires web based javascript to delete users with AJAX*/
     // router.get('/filter/:homeworld', function(req, res){
     //     var callbackCount = 0;

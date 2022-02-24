@@ -85,6 +85,56 @@ module.exports = function(){
         }
     });
 
+    function getItemOrdersLike(req, res, mysql, context, complete) {
+        //sanitize the input as well as include the % character
+          var query = "SELECT orderID, itemID FROM ItemOrders WHERE orderID LIKE " + mysql.pool.escape(req.params.orderID + '%') + "AND itemID LIKE " + mysql.pool.escape(req.params.itemID + '%');
+        console.log(query)
+  
+        mysql.pool.query(query, function(error, results, fields){
+              if(error){
+                  res.write(JSON.stringify(error));
+                  res.end();
+              }
+              context.itemOrders = results;
+              complete();
+          });
+      }
+  
+      router.get('/:orderID/:itemID', function(req, res){
+          console.log(req.body);
+          var callbackCount = 0;
+          var countEmpty = 0;
+          var context = {};
+          //context.jsscripts = ["deleteperson.js","filterpeople.js","searchpeople.js"];
+          var mysql = req.app.get('mysql');
+          if (req.params.orderID == 'empty')
+          {
+              countEmpty++;
+              req.params.orderID = '';
+          }
+          if (req.params.itemID == 'empty')
+          {
+              countEmpty++;
+              req.params.itemID = '';
+          }
+          if (countEmpty == 2)
+          {
+              res.redirect('/itemOrders');
+          }
+          else
+          {
+              getItemOrdersLike(req, res, mysql, context, complete);
+              //getPlanets(res, mysql, context, complete);
+              function complete(){
+                  callbackCount++;
+                  if(callbackCount >= 1){
+                      res.render('itemOrders', context);
+                  }
+  
+              }
+          }
+      });
+
     // /*Display all people from a given homeworld. Requires web based javascript to delete users with AJAX*/
     // router.get('/filter/:homeworld', function(req, res){
     //     var callbackCount = 0;

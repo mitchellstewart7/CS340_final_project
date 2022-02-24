@@ -85,6 +85,56 @@ module.exports = function(){
         }
     });
 
+    function getDepartmentsLike(req, res, mysql, context, complete) {
+        //sanitize the input as well as include the % character
+          var query = "SELECT departmentNumber, departmentName FROM Departments WHERE departmentNumber LIKE " + mysql.pool.escape(req.params.departmentNumber + '%') + "AND departmentName LIKE " + mysql.pool.escape(req.params.departmentName + '%');
+        console.log(query)
+  
+        mysql.pool.query(query, function(error, results, fields){
+              if(error){
+                  res.write(JSON.stringify(error));
+                  res.end();
+              }
+              context.departments = results;
+              complete();
+          });
+      }
+  
+      router.get('/:departmentNumber/:departmentName', function(req, res){
+          console.log(req.body);
+          var callbackCount = 0;
+          var countEmpty = 0;
+          var context = {};
+          //context.jsscripts = ["deleteperson.js","filterpeople.js","searchpeople.js"];
+          var mysql = req.app.get('mysql');
+          if (req.params.departmentNumber == 'empty')
+          {
+              countEmpty++;
+              req.params.departmentNumber = '';
+          }
+          if (req.params.departmentName == 'empty')
+          {
+              countEmpty++;
+              req.params.departmentName = '';
+          }
+          if (countEmpty == 2)
+          {
+              res.redirect('/departments');
+          }
+          else
+          {
+              getDepartmentsLike(req, res, mysql, context, complete);
+              //getPlanets(res, mysql, context, complete);
+              function complete(){
+                  callbackCount++;
+                  if(callbackCount >= 1){
+                      res.render('departments', context);
+                  }
+  
+              }
+          }
+      });
+
     // /*Display all people from a given homeworld. Requires web based javascript to delete users with AJAX*/
     // router.get('/filter/:homeworld', function(req, res){
     //     var callbackCount = 0;
