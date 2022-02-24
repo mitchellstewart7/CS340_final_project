@@ -36,13 +36,13 @@
     justify-content: center;
 }
 
-#create-button {
+.create-button {
     vertical-align: middle;
     margin: 5px 30px 5px 30px;
     width: 15%;
 }
 
-#filter-button {
+.filter-button {
     vertical-align: middle;
     margin: 5px 30px 5px 30px;
     width: 15%;
@@ -100,4 +100,25 @@
     vertical-align: middle;
     margin: 5px 10px 5px 0;
     width: 30%;
+}
+
+.hidden {
+    display: none;
+}
+
+#modal-backdrop {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.85);
+}
+#update-modal {
+    position: relative;
+    z-index: 1010;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 3px;
 }

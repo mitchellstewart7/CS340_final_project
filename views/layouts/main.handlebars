@@ -1,1 +1,95 @@
-{{{body}}}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Price Mart Orders</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://web.engr.oregonstate.edu/~stewamit/CS340/CS340_final_project/style.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="/static/deleterow.js"></script>
+    <script src="/static/search.js"></script>
+    <script src="/static/updaterow.js"></script>
+    <script language="JavaScript">
+        function ordersAlert()
+        {
+            var customerID = document.getElementById('ord-customer-id');
+            var orderDate = document.getElementById('order-date');
+            var totalPrice = document.getElementById('total-price');
+            if (customerID.value == "" || orderDate.value == "" || totalPrice.value == "")
+            {
+                alert('Customer ID, Order Date, and Total Price are required fields');
+            }
+        }
+        function titlesAlert()
+        {
+            var title = document.getElementById('title-title');
+            var payScale = document.getElementById('pay-scale');
+            if (title.value == "" || payScale.value == "")
+            {
+                alert('Title and Pay Scale are required fields');
+            }
+        }
+        function itemsAlert()
+        {
+            var itemName = document.getElementById('itemName');
+            var departmentNumber = document.getElementById('departmentNumber');
+            var numberInStock = document.getElementById('numberInStock');
+            var optimalStock = document.getElementById('optimalStock');
+            var price = document.getElementById('price');
+            if (itemName.value == "" || departmentNumber.value == "" || numberInStock.value == "" || optimalStock.value == "" || price.value == "")
+            {
+                alert('Item Name, Department Number, Number In Stock, Optimal Stock, and Price are required fields');
+            }
+        }
+        function itemOrdersAlert()
+        {
+            var orderID = document.getElementById('itemord-order-id');
+            var itemID = document.getElementById('itemord-item-id');
+            if (orderID.value == "" || itemID.value == "")
+            {
+                alert('Order ID and Item ID are required fields');
+            }
+        }
+        function employeesAlert()
+        {
+            var firstName = document.getElementById('emp-first-name');
+            var lastName = document.getElementById('emp-last-name');
+            var areaCode = document.getElementById('emp-area-code');
+            var phoneNumber = document.getElementById('emp-phone-number');
+            var startDate = document.getElementById('emp-start-date');
+            var email = document.getElementById('emp-email');
+            var hoursWorked = document.getElementById('hours-worked');
+            var title = document.getElementById('emp-title');
+            if (firstName.value == "" || lastName.value == "" || startDate.value == "" || email.value == "" || hoursWorked.value == "" || title.value == '')
+            {
+                alert('First Name, Last Name, Start Date, Email, Hours Worked, and Title are required fields');
+            }
+        }
+        function departmentsAlert()
+        {
+            var departmentNumber = document.getElementById('dep-department-number');
+            var departmentName = document.getElementById('departmentName');
+            if (departmentNumber.value == "" || departmentName.value == "")
+            {
+                alert('Department Number and Department Name are required fields');
+            }
+        }
+        function customersAlert()
+        {
+            var firstName = document.getElementById('cust-first-name');
+            var lastName = document.getElementById('cust-last-name');
+            var email = document.getElementById('cust-email');
+            var areaCode = document.getElementById('cust-area-code');
+            var phoneNumber = document.getElementById('cust-phone-number');
+            var accountStartDate = document.getElementById('acc-start-date');
+            if (firstName.value == "" || lastName.value == "" || email.value == "" || accountStartDate.value == "")
+            {
+                alert('First Name, Last Name, Email, and Account Start Date are required fields');
+            }
+        }
+    </script>
+  </head>
+
+    {{{body}}}
+</html>
+

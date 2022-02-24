@@ -8,6 +8,16 @@ module.exports = function(){
                 res.write(JSON.stringify(error));
                 res.end();
             }
+            for (var i = 0; i < results.length; i++)
+            {
+                //console.log(results[i].orderDate);
+                var datestr = new Date(results[i].startDate);
+
+                date = JSON.stringify(datestr);
+                date = date.slice(1,11);
+                results[i].startDate = date;
+                //console.log(date);  
+            }
             context.employees = results;
             complete();
         });
@@ -138,60 +148,82 @@ module.exports = function(){
 
     /* Adds a person, redirects to the people page after adding */
 
-    // router.post('/', function(req, res){
-    //     console.log(req.body.homeworld)
-    //     console.log(req.body)
-    //     var mysql = req.app.get('mysql');
-    //     var sql = "INSERT INTO bsg_people (fname, lname, homeworld, age) VALUES (?,?,?,?)";
-    //     var inserts = [req.body.fname, req.body.lname, req.body.homeworld, req.body.age];
-    //     sql = mysql.pool.query(sql,inserts,function(error, results, fields){
-    //         if(error){
-    //             console.log(JSON.stringify(error))
-    //             res.write(JSON.stringify(error));
-    //             res.end();
-    //         }else{
-    //             res.redirect('/orders');
-    //         }
-    //     });
-    // });
+    router.post('/', function(req, res){
+        // console.log(req.body.homeworld)
+        console.log(req.body);
+        if (req.body.firstName == '' || req.body.lastName == '' || req.body.startDate == '' || req.body.email == '' || req.body.hoursWorked == '' || req.body.title == '')
+        {
+            res.redirect('/employees');
+        }
+        else
+        {
+            var mysql = req.app.get('mysql');
+            var sql = "INSERT INTO Employees (firstName, lastName, areaCode, phoneNumber, startDate, email, hoursWorked, title) VALUES (?,?,?,?,?,?,?,?)";
+            if (req.body.areaCode == '' && req.body.phoneNumber == '')
+            {
+                var inserts = [req.body.firstName, req.body.lastName, null, null, req.body.startDate, req.body.email, req.body.hoursWorked, req.body.title];
+            }
+            else if (req.body.areaCode == '')
+            {
+                var inserts = [req.body.firstName, req.body.lastName, null, req.body.phoneNumber, req.body.startDate, req.body.email, req.body.hoursWorked, req.body.title];
+            }
+            else if (req.body.phoneNumber == '')
+            {
+                var inserts = [req.body.firstName, req.body.lastName, req.body.areaCode, null, req.body.startDate, req.body.email, req.body.hoursWorked, req.body.title];
+            }
+            else
+            {
+                var inserts = [req.body.firstName, req.body.lastName, req.body.areaCode, req.body.phoneNumber, req.body.startDate, req.body.email, req.body.hoursWorked, req.body.title];
+            }
+            sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+                if(error){
+                    console.log(JSON.stringify(error))
+                    res.write(JSON.stringify(error));
+                    res.end();
+                }else{
+                    res.redirect('/employees');
+                }
+            });
+        }
+    });
 
     /* The URI that update data is sent to in order to update a person */
 
-    // router.put('/:id', function(req, res){
-    //     var mysql = req.app.get('mysql');
-    //     console.log(req.body)
-    //     console.log(req.params.id)
-    //     var sql = "UPDATE bsg_people SET fname=?, lname=?, homeworld=?, age=? WHERE character_id=?";
-    //     var inserts = [req.body.fname, req.body.lname, req.body.homeworld, req.body.age, req.params.id];
-    //     sql = mysql.pool.query(sql,inserts,function(error, results, fields){
-    //         if(error){
-    //             console.log(error)
-    //             res.write(JSON.stringify(error));
-    //             res.end();
-    //         }else{
-    //             res.status(200);
-    //             res.end();
-    //         }
-    //     });
-    // });
+    router.put('/:employeeID', function(req, res){
+        var mysql = req.app.get('mysql');
+        console.log(req.body)
+        //console.log(req.params.id)
+        var sql = "UPDATE Employees SET firstName=?, lastName=?, areaCode=?, phoneNumber=?, startDate=?, email=?, hoursWorked=?, title=? WHERE employeeID=?";
+        var inserts = [req.body.firstName, req.body.lastName, req.body.areaCode, req.body.phoneNumber, req.body.startDate, req.body.email, req.body.hoursWorked, req.body.title, req.params.employeeID];
+        sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+            if(error){
+                console.log(error)
+                res.write(JSON.stringify(error));
+                res.end();
+            }else{
+                res.status(200);
+                res.end();
+            }
+        });
+    });
 
     /* Route to delete a person, simply returns a 202 upon success. Ajax will handle this. */
 
-    // router.delete('/:id', function(req, res){
-    //     var mysql = req.app.get('mysql');
-    //     var sql = "DELETE FROM bsg_people WHERE character_id = ?";
-    //     var inserts = [req.params.id];
-    //     sql = mysql.pool.query(sql, inserts, function(error, results, fields){
-    //         if(error){
-    //             console.log(error)
-    //             res.write(JSON.stringify(error));
-    //             res.status(400);
-    //             res.end();
-    //         }else{
-    //             res.status(202).end();
-    //         }
-    //     })
-    // })
+    router.delete('/:employeeID', function(req, res){
+        var mysql = req.app.get('mysql');
+        var sql = "DELETE FROM Employees WHERE employeeID = ?";
+        var inserts = [req.params.employeeID];
+        sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+            if(error){
+                console.log(error)
+                res.write(JSON.stringify(error));
+                res.status(400);
+                res.end();
+            }else{
+                res.status(202).end();
+            }
+        })
+    })
 
     return router;
 }();

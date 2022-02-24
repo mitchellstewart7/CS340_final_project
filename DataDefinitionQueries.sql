@@ -89,8 +89,8 @@ DROP TABLE IF EXISTS `Orders`;
 
 CREATE TABLE `Orders` (
   `orderId` int NOT NULL AUTO_INCREMENT UNIQUE,
-  `customerID` int NOT NULL UNIQUE,
-  `employeeID` int UNIQUE,
+  `customerID` int NOT NULL,
+  `employeeID` int,
   `orderDate` date NOT NULL,
   `totalPrice` double NOT NULL,
     PRIMARY KEY (`orderID`),

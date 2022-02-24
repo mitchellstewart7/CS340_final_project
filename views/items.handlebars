@@ -1,12 +1,3 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Price Mart Items</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://web.engr.oregonstate.edu/~stewamit/CS340/CS340_final_project/style.css">
-    <script src="https://web.engr.oregonstate.edu/~stewamit/CS340/CS340_final_project/script.js" charset="utf-8" defer></script>
-  </head>
 
   <body>
     <header>
@@ -46,7 +37,7 @@
 
         <div class="page-content">
           <div class="create-filter">
-            <form class="form-section">
+            <form class="form-section" id="items-form" action="/items" method="post">
               <div class="label-section">
                 <label for="itemID">Item ID:</label>
                 <input type="number" id="item-item-id" name="itemID">
@@ -91,9 +82,58 @@
                 <input type="number" step="0.01" id="price" name="price">
               </div>
             </form>
+
+            <div id="modal-backdrop" class="hidden"></div>
+            <div id="update-modal" class="hidden">
+              <form class="form-section" id="items-update-form">
+                
+                <div class="label-section">
+                    <label for="itemName">Item Name:</label>
+                    <input type="text" id="update-itemName" name="itemName">
+                </div>
+
+                <div class="label-section">
+                    <label for="departmentNumber">Department Number</label>
+                    <select id="update-departmentNumber" name="departmentNumber">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                        <option>9</option>
+                        <option>10</option>
+                        <option>11</option>
+                        <option>12</option>
+                        <option>13</option>
+                    </select>
+                </div>
+              
+                <div class="label-section">
+                    <label for="numberInStock">Number In Stock:</label>
+                    <input type="number" id="update-numberInStock" name="numberInStock">
+                </div>
+
+                <div class="label-section">
+                    <label for="optimalStock">Optimal Stock:</label>
+                    <input type="number" id="update-optimalStock" name="optimalStock">
+                </div>
+              
+                <div class="label-section">
+                    <label for="price">Price:</label>
+                    <input type="number" step="0.01" id="update-price" name="price">
+                </div>
+
+                <input type="submit" value="Submit" id="modal-submit"/>
+
+              </form>
+            </div>
+
             <div class="create-filter-buttons">
-              <button id="create-button">Create Entry</button>
-              <button id="filter-button">Filter Table</button>
+              <button type="submit" form="items-form" onclick="itemsAlert()" id="items-create-button" class="create-button">Create Entry</button>
+              <button id="items-filter-button" class="filter-button">Filter Table</button>
             </div>
           </div>
         </div>
@@ -120,8 +160,8 @@
                 <td>{{numberInStock}}</td>
                 <td>{{optimalStock}}</td>
                 <td>{{price}}</td>
-                <td><button id="update-button">Update</button></td>
-                <td><button id="delete-button">Delete</button></td>
+                <td><button onclick="toggleItemsModal({{itemID}}, '{{itemName}}', '{{departmentNumber}}', '{{numberInStock}}', '{{optimalStock}}', '{{price}}')" id="update-button">Update</button></td>
+                <td><button onclick="deleteItem({{itemID}})" id="delete-button">Delete</button></td>
               </tr>
               {{/each}}
             </tbody>
@@ -129,4 +169,4 @@
         </div>
     </main>
   </body>
-</html>
+

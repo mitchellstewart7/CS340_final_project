@@ -8,6 +8,16 @@ module.exports = function(){
                 res.write(JSON.stringify(error));
                 res.end();
             }
+            for (var i = 0; i < results.length; i++)
+            {
+                //console.log(results[i].orderDate);
+                var datestr = new Date(results[i].orderDate);
+
+                date = JSON.stringify(datestr);
+                date = date.slice(1,11);
+                results[i].orderDate = date;
+                //console.log(date);  
+            }
             context.orders = results;
             complete();
         });
@@ -85,6 +95,81 @@ module.exports = function(){
         }
     });
 
+    function getOrdersLike(req, res, mysql, context, complete) {
+      //sanitize the input as well as include the % character
+        var query = "SELECT orderID, customerID, employeeID, orderDate, totalPrice FROM Orders WHERE orderID LIKE " + mysql.pool.escape(req.params.orderID + '%') + "AND customerID LIKE " + mysql.pool.escape(req.params.customerID + '%') + "AND employeeID LIKE "+ mysql.pool.escape(req.params.employeeID + '%') + "AND orderDate LIKE "+ mysql.pool.escape(req.params.orderDate + '%') + "AND totalPrice LIKE "+ mysql.pool.escape(req.params.totalPrice + '%');
+      console.log(query)
+
+      mysql.pool.query(query, function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }
+            for (var i = 0; i < results.length; i++)
+            {
+                //console.log(results[i].orderDate);
+                var datestr = new Date(results[i].orderDate);
+
+                date = JSON.stringify(datestr);
+                date = date.slice(1,11);
+                results[i].orderDate = date;
+                //console.log(date);  
+            }
+            context.orders = results;
+            complete();
+        });
+    }
+
+    router.get('/:orderID/:customerID/:employeeID/:orderDate/:totalPrice', function(req, res){
+        console.log(req.body);
+        var callbackCount = 0;
+        var countEmpty = 0;
+        var context = {};
+        //context.jsscripts = ["deleteperson.js","filterpeople.js","searchpeople.js"];
+        var mysql = req.app.get('mysql');
+        if (req.params.orderID == 'empty')
+        {
+            countEmpty++;
+            req.params.orderID = '';
+        }
+        if (req.params.customerID == 'empty')
+        {
+            countEmpty++;
+            req.params.customerID = '';
+        }
+        if (req.params.employeeID == 'empty')
+        {
+            countEmpty++;
+            req.params.employeeID = '';
+        }
+        if (req.params.orderDate == 'empty')
+        {
+            countEmpty++;
+            req.params.orderDate = '';
+        }
+        if (req.params.totalPrice == 'empty')
+        {
+            countEmpty++;
+            req.params.totalPrice = '';
+        }
+        if (countEmpty == 5)
+        {
+            res.redirect('/orders');
+        }
+        else
+        {
+            getOrdersLike(req, res, mysql, context, complete);
+            //getPlanets(res, mysql, context, complete);
+            function complete(){
+                callbackCount++;
+                if(callbackCount >= 1){
+                    res.render('orders', context);
+                }
+
+            }
+        }
+    });
+
     // /*Display all people from a given homeworld. Requires web based javascript to delete users with AJAX*/
     // router.get('/filter/:homeworld', function(req, res){
     //     var callbackCount = 0;
@@ -138,60 +223,74 @@ module.exports = function(){
 
     /* Adds a person, redirects to the people page after adding */
 
-    // router.post('/', function(req, res){
-    //     console.log(req.body.homeworld)
-    //     console.log(req.body)
-    //     var mysql = req.app.get('mysql');
-    //     var sql = "INSERT INTO bsg_people (fname, lname, homeworld, age) VALUES (?,?,?,?)";
-    //     var inserts = [req.body.fname, req.body.lname, req.body.homeworld, req.body.age];
-    //     sql = mysql.pool.query(sql,inserts,function(error, results, fields){
-    //         if(error){
-    //             console.log(JSON.stringify(error))
-    //             res.write(JSON.stringify(error));
-    //             res.end();
-    //         }else{
-    //             res.redirect('/orders');
-    //         }
-    //     });
-    // });
+    router.post('/', function(req, res){
+        // console.log(req.body.homeworld)
+        console.log(req.body);
+        if (req.body.customerID == '' || req.body.orderDate == '' || req.body.totalPrice == '')
+        {
+            res.redirect('/orders');
+        }
+        else
+        {
+            var mysql = req.app.get('mysql');
+            var sql = "INSERT INTO Orders (customerID, employeeID, orderDate, totalPrice) VALUES (?,?,?,?)";
+            if (req.body.employeeID == "")
+            {
+                var inserts = [req.body.customerID, null, req.body.orderDate, req.body.totalPrice];
+            }
+            else
+            {
+                var inserts = [req.body.customerID, req.body.employeeID, req.body.orderDate, req.body.totalPrice];
+            }
+            sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+                if(error){
+                    console.log(JSON.stringify(error))
+                    res.write(JSON.stringify(error));
+                    res.end();
+                }else{
+                    res.redirect('/orders');
+                }
+            });
+        }
+    });
 
     /* The URI that update data is sent to in order to update a person */
 
-    // router.put('/:id', function(req, res){
-    //     var mysql = req.app.get('mysql');
-    //     console.log(req.body)
-    //     console.log(req.params.id)
-    //     var sql = "UPDATE bsg_people SET fname=?, lname=?, homeworld=?, age=? WHERE character_id=?";
-    //     var inserts = [req.body.fname, req.body.lname, req.body.homeworld, req.body.age, req.params.id];
-    //     sql = mysql.pool.query(sql,inserts,function(error, results, fields){
-    //         if(error){
-    //             console.log(error)
-    //             res.write(JSON.stringify(error));
-    //             res.end();
-    //         }else{
-    //             res.status(200);
-    //             res.end();
-    //         }
-    //     });
-    // });
+    router.put('/:orderID', function(req, res){
+        var mysql = req.app.get('mysql');
+        console.log(req.body)
+        //console.log(req.params.id)
+        var sql = "UPDATE Orders SET customerID=?, employeeID=?, orderDate=?, totalPrice=? WHERE orderID=?";
+        var inserts = [req.body.customerID, req.body.employeeID, req.body.orderDate, req.body.totalPrice, req.params.orderID];
+        sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+            if(error){
+                console.log(error)
+                res.write(JSON.stringify(error));
+                res.end();
+            }else{
+                res.status(200);
+                res.end();
+            }
+        });
+    });
 
     /* Route to delete a person, simply returns a 202 upon success. Ajax will handle this. */
 
-    // router.delete('/:id', function(req, res){
-    //     var mysql = req.app.get('mysql');
-    //     var sql = "DELETE FROM bsg_people WHERE character_id = ?";
-    //     var inserts = [req.params.id];
-    //     sql = mysql.pool.query(sql, inserts, function(error, results, fields){
-    //         if(error){
-    //             console.log(error)
-    //             res.write(JSON.stringify(error));
-    //             res.status(400);
-    //             res.end();
-    //         }else{
-    //             res.status(202).end();
-    //         }
-    //     })
-    // })
+    router.delete('/:orderID', function(req, res){
+        var mysql = req.app.get('mysql');
+        var sql = "DELETE FROM Orders WHERE orderID = ?";
+        var inserts = [req.params.orderID];
+        sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+            if(error){
+                console.log(error)
+                res.write(JSON.stringify(error));
+                res.status(400);
+                res.end();
+            }else{
+                res.status(202).end();
+            }
+        })
+    })
 
     return router;
 }();

@@ -1,12 +1,3 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Price Mart Customers</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://web.engr.oregonstate.edu/~stewamit/CS340/CS340_final_project/style.css">
-    <script src="https://web.engr.oregonstate.edu/~stewamit/CS340/CS340_final_project/script.js" charset="utf-8" defer></script>
-  </head>
 
   <body>
     <header>
@@ -45,7 +36,7 @@
       </div>
       <div class="page-content">
         <div class="create-filter">
-          <form class="form-section">
+          <form class="form-section" id="customers-form" action="/customers" method="post">
             <div class="label-section">
               <label for="customerID">Customer ID:</label>
               <input type="number" id="cust-customer-id" name="customerID">
@@ -82,9 +73,48 @@
             </div>
 
           </form>
+
+          <div id="modal-backdrop" class="hidden"></div>
+          <div id="update-modal" class="hidden">
+              <form class="form-section" id="customers-update-form">
+                <div class="label-section">
+                    <label for="firstName">First Name:</label>
+                    <input type="text" id="update-cust-first-name" name="firstName">
+                </div>
+
+                <div class="label-section">
+                    <label for="lastName">Last Name:</label>
+                    <input type="text" id="update-cust-last-name" name="lastName">
+                </div>
+
+                <div class="label-section">
+                    <label for="email">Email:</label>
+                    <input type="text" id="update-cust-email" name="email">
+                </div>
+
+                <div class="label-section">
+                    <label for="areaCode">Area Code:</label>
+                    <input type="number" id="update-cust-area-code" name="areaCode">
+                </div>
+
+                <div class="label-section">
+                    <label for="phoneNumber">Phone Number:</label>
+                    <input type="number" id="update-cust-phone-number" name="phoneNumber">
+                </div>
+            
+                <div class="label-section">
+                    <label for="accountStartDate">Account Start Date:</label>
+                    <input type="date" id="update-acc-start-date" name="accountStartDate">
+                </div>
+
+                <input type="submit" value="Submit" id="modal-submit"/>
+
+            </form>
+          </div>
+
           <div class="create-filter-buttons">
-            <button id="create-button">Create Entry</button>
-            <button id="filter-button">Filter Table</button>
+            <button type="submit" form="customers-form" onclick="customersAlert()" id="customers-create-button" class="create-button">Create Entry</button>
+            <button id="customers-filter-button" class="filter-button">Filter Table</button>
           </div>
         </div>
       </div>
@@ -113,8 +143,8 @@
               <td>{{areaCode}}</td>
               <td>{{phoneNumber}}</td>
               <td>{{accountStartDate}}</td>
-              <td><button id="update-button">Update</button></td>
-              <td><button id="delete-button">Delete</button></td>
+              <td><button onclick="toggleCustomersModal({{customerID}}, '{{firstName}}', '{{lastName}}', '{{email}}', '{{areaCode}}', '{{phoneNumber}}', '{{accountStartDate}}')" id="update-button">Update</button></td>
+              <td><button onclick="deleteCustomer({{customerID}})" id="delete-button">Delete</button></td>
             </tr>
             {{/each}}
           </tbody>
@@ -122,4 +152,4 @@
       </div>
     </main>
   </body>
-</html>
+
