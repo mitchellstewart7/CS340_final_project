@@ -3,12 +3,24 @@ module.exports = function(){
     var router = express.Router();
 
     function getItems(res, mysql, context, complete){
-        mysql.pool.query("SELECT itemID, itemName, departmentNumber, numberInStock, optimalStock, price FROM Items", function(error, results, fields){
+        mysql.pool.query("SELECT itemID, itemName, departmentNumber, numberInStock, optimalStock, price FROM Items ORDER BY itemID ASC", function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
                 res.end();
             }
             context.items = results;
+            complete();
+        });
+    }
+
+    function getDepartments(res, mysql, context, complete){
+        mysql.pool.query("SELECT departmentNumber FROM Departments ORDER BY departmentNumber ASC", function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }
+            //console.log(results);
+            context.departments = results;
             complete();
         });
     }
@@ -75,10 +87,10 @@ module.exports = function(){
         //context.jsscripts = ["deleteperson.js","filterpeople.js","searchpeople.js"];
         var mysql = req.app.get('mysql');
         getItems(res, mysql, context, complete);
-        //getPlanets(res, mysql, context, complete);
+        getDepartments(res, mysql, context, complete);
         function complete(){
             callbackCount++;
-            if(callbackCount >= 1){
+            if(callbackCount >= 2){
                 res.render('items', context);
             }
 
@@ -144,10 +156,10 @@ module.exports = function(){
           else
           {
               getItemsLike(req, res, mysql, context, complete);
-              //getPlanets(res, mysql, context, complete);
+              getDepartments(res, mysql, context, complete);
               function complete(){
                   callbackCount++;
-                  if(callbackCount >= 1){
+                  if(callbackCount >= 2){
                       res.render('items', context);
                   }
   
@@ -211,7 +223,7 @@ module.exports = function(){
     router.post('/', function(req, res){
         // console.log(req.body.homeworld)
         console.log(req.body);
-        if (req.body.itemName == '' || req.body.departmentNumber == '' || req.body.numberInStock == '' || req.body.optimalStock == '' || req.body.price == '')
+        if (req.body.itemName == '' || req.body.departmentNumber == 'Any' || req.body.numberInStock == '' || req.body.optimalStock == '' || req.body.price == '')
         {
             res.redirect('/items');
         }

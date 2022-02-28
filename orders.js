@@ -3,7 +3,7 @@ module.exports = function(){
     var router = express.Router();
 
     function getOrders(res, mysql, context, complete){
-        mysql.pool.query("SELECT orderID, customerID, employeeID, orderDate, totalPrice FROM Orders", function(error, results, fields){
+        mysql.pool.query("SELECT orderID, customerID, employeeID, orderDate, totalPrice FROM Orders ORDER BY orderID ASC", function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
                 res.end();
@@ -23,16 +23,27 @@ module.exports = function(){
         });
     }
 
-    // function getPeople(res, mysql, context, complete){
-    //     mysql.pool.query("SELECT bsg_people.character_id as id, fname, lname, bsg_planets.name AS homeworld, age FROM bsg_people INNER JOIN bsg_planets ON homeworld = bsg_planets.planet_id", function(error, results, fields){
-    //         if(error){
-    //             res.write(JSON.stringify(error));
-    //             res.end();
-    //         }
-    //         context.people = results;
-    //         complete();
-    //     });
-    // }
+    function getCustomers(res, mysql, context, complete){
+        mysql.pool.query("SELECT customerID FROM Customers ORDER BY customerID ASC", function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }
+            context.customers = results;
+            complete();
+        });
+    }
+
+    function getEmployees(res, mysql, context, complete){
+        mysql.pool.query("SELECT employeeID from Employees ORDER BY employeeID ASC", function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }
+            context.employees = results;
+            complete();
+        });
+    }
 
     // function getPeoplebyHomeworld(req, res, mysql, context, complete){
     //   var query = "SELECT bsg_people.character_id as id, fname, lname, bsg_planets.name AS homeworld, age FROM bsg_people INNER JOIN bsg_planets ON homeworld = bsg_planets.planet_id WHERE bsg_people.homeworld = ?";
@@ -85,10 +96,11 @@ module.exports = function(){
         //context.jsscripts = ["deleteperson.js","filterpeople.js","searchpeople.js"];
         var mysql = req.app.get('mysql');
         getOrders(res, mysql, context, complete);
-        //getPlanets(res, mysql, context, complete);
+        getCustomers(res, mysql, context, complete);
+        getEmployees(res, mysql, context, complete);
         function complete(){
             callbackCount++;
-            if(callbackCount >= 1){
+            if(callbackCount >= 3){
                 res.render('orders', context);
             }
 
@@ -159,10 +171,11 @@ module.exports = function(){
         else
         {
             getOrdersLike(req, res, mysql, context, complete);
-            //getPlanets(res, mysql, context, complete);
+            getCustomers(res, mysql, context, complete);
+            getEmployees(res, mysql, context, complete);
             function complete(){
                 callbackCount++;
-                if(callbackCount >= 1){
+                if(callbackCount >= 3){
                     res.render('orders', context);
                 }
 
@@ -226,7 +239,7 @@ module.exports = function(){
     router.post('/', function(req, res){
         // console.log(req.body.homeworld)
         console.log(req.body);
-        if (req.body.customerID == '' || req.body.orderDate == '' || req.body.totalPrice == '')
+        if (req.body.customerID == 'Any' || req.body.orderDate == '' || req.body.totalPrice == '')
         {
             res.redirect('/orders');
         }
@@ -234,7 +247,7 @@ module.exports = function(){
         {
             var mysql = req.app.get('mysql');
             var sql = "INSERT INTO Orders (customerID, employeeID, orderDate, totalPrice) VALUES (?,?,?,?)";
-            if (req.body.employeeID == "")
+            if (req.body.employeeID == "Any")
             {
                 var inserts = [req.body.customerID, null, req.body.orderDate, req.body.totalPrice];
             }

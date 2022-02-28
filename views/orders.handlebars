@@ -45,12 +45,22 @@
 
             <div class="label-section">
               <label for="customerID">Customer ID:</label>
-              <input type="number" id="ord-customer-id" class="order-input" name="customerID">
+              <select id="ord-customer-id" class="order-input" name="customerID">
+                <option>Any</option>
+                {{#each customers}}
+                  <option>{{customerID}}</option>
+                {{/each}}
+              </select>
             </div>
 
             <div class="label-section">
               <label for="employeeID">Employee ID:</label>
-              <input type="number" id="ord-employee-id" class="order-input" name="employeeID">
+              <select id="ord-employee-id" class="order-input" name="employeeID">
+                <option>Any</option>
+                {{#each employees}}
+                  <option>{{employeeID}}</option>
+                {{/each}}
+              </select>
             </div>
 
             <div class="label-section">
@@ -69,12 +79,20 @@
               <form class="form-section" id="orders-update-form">
                 <div class="label-section">
                     <label for="customerID">Customer ID:</label>
-                    <input type="number" id="update-ord-customer-id" class="order-input" name="customerID">
+                    <select id="update-ord-customer-id" class="order-input" name="customerID">
+                      {{#each customers}}
+                        <option>{{customerID}}</option>
+                      {{/each}}
+                    </select>
                 </div>
 
                 <div class="label-section">
                     <label for="employeeID">Employee ID:</label>
-                    <input type="number" id="update-ord-employee-id" class="order-input" name="employeeID">
+                    <select id="update-ord-employee-id" class="order-input" name="employeeID">
+                      {{#each employees}}
+                        <option>{{employeeID}}</option>
+                      {{/each}}
+                    </select>
                 </div>
 
                 <div class="label-section">

@@ -40,12 +40,22 @@
 
               <div class="label-section">
                 <label for="orderID">Order ID:</label>
-                <input type="number" id="itemord-order-id" name="orderID">
+                <select id="itemord-order-id" name="orderID">
+                  <option>Any</option>
+                  {{#each orders}}
+                    <option>{{orderID}}</option>
+                  {{/each}}
+                </select>
               </div>
 
               <div class="label-section">
                 <label for="itemID">Item ID:</label>
-                <input type="number" id="itemord-item-id" name="itemID">
+                <select id="itemord-item-id" name="itemID">
+                  <option>Any</option>
+                  {{#each items}}
+                    <option>{{itemID}}</option>
+                  {{/each}}
+                </select>
               </div>
               
             </form>
@@ -55,12 +65,20 @@
               <form class="form-section" id="itemOrders-update-form">
                 <div class="label-section">
                     <label for="orderID">Order ID:</label>
-                    <input type="number" id="update-itemord-order-id" name="orderID">
+                    <select id="update-itemord-order-id" name="orderID">
+                      {{#each orders}}
+                        <option>{{orderID}}</option>
+                      {{/each}}
+                    </select>
                 </div>
 
                 <div class="label-section">
                     <label for="itemID">Item ID:</label>
-                    <input type="number" id="update-itemord-item-id" name="itemID">
+                    <select id="update-itemord-item-id" name="itemID">
+                      {{#each items}}
+                        <option>{{itemID}}</option>
+                      {{/each}}
+                    </select>
                 </div>
 
                 <input type="submit" value="Submit" id="modal-submit"/>

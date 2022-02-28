@@ -3,7 +3,7 @@ module.exports = function(){
     var router = express.Router();
 
     function getEmployees(res, mysql, context, complete){
-        mysql.pool.query("SELECT employeeID, firstName, lastName, areaCode, phoneNumber, startDate, email, hoursWorked, title FROM Employees", function(error, results, fields){
+        mysql.pool.query("SELECT employeeID, firstName, lastName, areaCode, phoneNumber, startDate, email, hoursWorked, title FROM Employees ORDER BY employeeID ASC", function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
                 res.end();
@@ -19,6 +19,17 @@ module.exports = function(){
                 //console.log(date);  
             }
             context.employees = results;
+            complete();
+        });
+    }
+
+    function getTitles(res, mysql, context, complete){
+        mysql.pool.query("SELECT title FROM Titles", function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }
+            context.titles = results;
             complete();
         });
     }
@@ -85,10 +96,10 @@ module.exports = function(){
         //context.jsscripts = ["deleteperson.js","filterpeople.js","searchpeople.js"];
         var mysql = req.app.get('mysql');
         getEmployees(res, mysql, context, complete);
-        //getPlanets(res, mysql, context, complete);
+        getTitles(res, mysql, context, complete);
         function complete(){
             callbackCount++;
-            if(callbackCount >= 1){
+            if(callbackCount >= 2){
                 res.render('employees', context);
             }
 
@@ -180,12 +191,12 @@ module.exports = function(){
           else
           {
               getEmployeesLike(req, res, mysql, context, complete);
-              console.log("context:");
-              console.log(context);
-              //getPlanets(res, mysql, context, complete);
+              //console.log("context:");
+              //console.log(context);
+              getTitles(res, mysql, context, complete);
               function complete(){
                   callbackCount++;
-                  if(callbackCount >= 1){
+                  if(callbackCount >= 2){
                       res.render('employees', context);
                   }
   
@@ -249,7 +260,7 @@ module.exports = function(){
     router.post('/', function(req, res){
         // console.log(req.body.homeworld)
         console.log(req.body);
-        if (req.body.firstName == '' || req.body.lastName == '' || req.body.startDate == '' || req.body.email == '' || req.body.hoursWorked == '' || req.body.title == '')
+        if (req.body.firstName == '' || req.body.lastName == '' || req.body.startDate == '' || req.body.email == '' || req.body.hoursWorked == '' || req.body.title == 'Any')
         {
             res.redirect('/employees');
         }

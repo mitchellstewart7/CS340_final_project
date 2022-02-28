@@ -191,15 +191,15 @@ module.exports = function(){
     router.post('/', function(req, res){
         // console.log(req.body.homeworld)
         console.log(req.body);
-        if (req.body.departmentNumber == '' || req.body.departmentName == '')
+        if (req.body.departmentName == '')
         {
             res.redirect('/departments');
         }
         else
         {
             var mysql = req.app.get('mysql');
-            var sql = "INSERT INTO Departments (departmentNumber, departmentName) VALUES (?,?)";
-            var inserts = [req.body.departmentNumber, req.body.departmentName];
+            var sql = "INSERT INTO Departments (departmentName) VALUES (?)";
+            var inserts = [req.body.departmentName];
             sql = mysql.pool.query(sql,inserts,function(error, results, fields){
                 if(error){
                     console.log(JSON.stringify(error))

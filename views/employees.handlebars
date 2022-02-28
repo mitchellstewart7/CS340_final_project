@@ -79,7 +79,12 @@
 
             <div class="label-section">
               <label for="title">Title:</label>
-              <input type="text" id="emp-title" name="title">
+              <select id="emp-title" name="title">
+                <option>Any</option>
+                {{#each titles}}
+                  <option>{{title}}</option>
+                {{/each}}
+              </select>
             </div>
 
           </form>
@@ -124,7 +129,11 @@
 
                 <div class="label-section">
                     <label for="title">Title:</label>
-                    <input type="text" id="update-emp-title" name="title">
+                    <select id="update-emp-title" name="title">
+                      {{#each titles}}
+                        <option>{{title}}</option>
+                      {{/each}}
+                    </select>
                 </div>
 
                 <input type="submit" value="Submit" id="modal-submit"/>

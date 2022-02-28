@@ -120,7 +120,7 @@ module.exports = function(){
           });
       }
   
-      router.get('/:customerID/:firstName/:lastName/:email/:phoneNumber/:areaCode/:accountStartDate', function(req, res){
+      router.get('/:customerID/:firstName/:lastName/:email/:areaCode/:phoneNumber/:accountStartDate', function(req, res){
           console.log(req.body);
           var callbackCount = 0;
           var countEmpty = 0;

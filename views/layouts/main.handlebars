@@ -15,7 +15,7 @@
             var customerID = document.getElementById('ord-customer-id');
             var orderDate = document.getElementById('order-date');
             var totalPrice = document.getElementById('total-price');
-            if (customerID.value == "" || orderDate.value == "" || totalPrice.value == "")
+            if (customerID.value == "Any" || orderDate.value == "" || totalPrice.value == "")
             {
                 alert('Customer ID, Order Date, and Total Price are required fields');
             }
@@ -36,7 +36,7 @@
             var numberInStock = document.getElementById('numberInStock');
             var optimalStock = document.getElementById('optimalStock');
             var price = document.getElementById('price');
-            if (itemName.value == "" || departmentNumber.value == "" || numberInStock.value == "" || optimalStock.value == "" || price.value == "")
+            if (itemName.value == "" || departmentNumber.value == "Any" || numberInStock.value == "" || optimalStock.value == "" || price.value == "")
             {
                 alert('Item Name, Department Number, Number In Stock, Optimal Stock, and Price are required fields');
             }
@@ -45,7 +45,7 @@
         {
             var orderID = document.getElementById('itemord-order-id');
             var itemID = document.getElementById('itemord-item-id');
-            if (orderID.value == "" || itemID.value == "")
+            if (orderID.value == "Any" || itemID.value == "Any")
             {
                 alert('Order ID and Item ID are required fields');
             }
@@ -60,18 +60,17 @@
             var email = document.getElementById('emp-email');
             var hoursWorked = document.getElementById('hours-worked');
             var title = document.getElementById('emp-title');
-            if (firstName.value == "" || lastName.value == "" || startDate.value == "" || email.value == "" || hoursWorked.value == "" || title.value == '')
+            if (firstName.value == "" || lastName.value == "" || startDate.value == "" || email.value == "" || hoursWorked.value == "" || title.value == 'Any')
             {
                 alert('First Name, Last Name, Start Date, Email, Hours Worked, and Title are required fields');
             }
         }
         function departmentsAlert()
         {
-            var departmentNumber = document.getElementById('dep-department-number');
             var departmentName = document.getElementById('departmentName');
-            if (departmentNumber.value == "" || departmentName.value == "")
+            if (departmentName.value == "")
             {
-                alert('Department Number and Department Name are required fields');
+                alert('Department Name is a required field');
             }
         }
         function customersAlert()

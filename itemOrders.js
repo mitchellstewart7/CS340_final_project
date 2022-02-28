@@ -13,6 +13,28 @@ module.exports = function(){
         });
     }
 
+    function getOrders(res, mysql, context, complete){
+        mysql.pool.query("SELECT orderID FROM Orders ORDER BY orderID ASC", function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }
+            context.orders = results;
+            complete();
+        });
+    }
+
+    function getItems(res, mysql, context, complete){
+        mysql.pool.query("SELECT itemID FROM Items ORDER BY itemID ASC", function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }
+            context.items = results;
+            complete();
+        });
+    }
+
     // function getPeople(res, mysql, context, complete){
     //     mysql.pool.query("SELECT bsg_people.character_id as id, fname, lname, bsg_planets.name AS homeworld, age FROM bsg_people INNER JOIN bsg_planets ON homeworld = bsg_planets.planet_id", function(error, results, fields){
     //         if(error){
@@ -75,10 +97,11 @@ module.exports = function(){
         //context.jsscripts = ["deleteperson.js","filterpeople.js","searchpeople.js"];
         var mysql = req.app.get('mysql');
         getItemOrders(res, mysql, context, complete);
-        //getPlanets(res, mysql, context, complete);
+        getOrders(res, mysql, context, complete);
+        getItems(res, mysql, context, complete);
         function complete(){
             callbackCount++;
-            if(callbackCount >= 1){
+            if(callbackCount >= 3){
                 res.render('itemOrders', context);
             }
 
@@ -124,10 +147,11 @@ module.exports = function(){
           else
           {
               getItemOrdersLike(req, res, mysql, context, complete);
-              //getPlanets(res, mysql, context, complete);
+              getOrders(res, mysql, context, complete);
+              getItems(res, mysql, context, complete);
               function complete(){
                   callbackCount++;
-                  if(callbackCount >= 1){
+                  if(callbackCount >= 3){
                       res.render('itemOrders', context);
                   }
   
@@ -191,7 +215,7 @@ module.exports = function(){
     router.post('/', function(req, res){
         // console.log(req.body.homeworld)
         console.log(req.body);
-        if (req.body.orderID == '' || req.body.itemID == '')
+        if (req.body.orderID == 'Any' || req.body.itemID == 'Any')
         {
             res.redirect('/itemOrders');
         }

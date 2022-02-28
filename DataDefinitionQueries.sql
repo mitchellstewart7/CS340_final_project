@@ -19,7 +19,7 @@ UNLOCK TABLES;
 --create Departments table
 DROP TABLE IF EXISTS `Departments`;
 CREATE TABLE `Departments` (
-  `departmentNumber` int NOT NULL UNIQUE,
+  `departmentNumber` int NOT NULL UNIQUE AUTO_INCREMENT,
   `departmentName` varchar(255) NOT NULL,
     PRIMARY KEY (`departmentNumber`)
  );

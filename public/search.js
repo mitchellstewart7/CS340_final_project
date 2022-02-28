@@ -9,11 +9,11 @@ function searchOrders()
     {
         orderID = 'empty';
     }
-    if (customerID == '')
+    if (customerID == 'Any')
     {
         customerID = 'empty';
     }
-    if (employeeID == '')
+    if (employeeID == 'Any')
     {
         employeeID = 'empty';
     }
@@ -71,7 +71,7 @@ function searchEmployees()
     {
         hoursWorked = 'empty';
     }
-    if (title == '')
+    if (title == 'Any')
     {
         title = 'empty';
     }
@@ -82,11 +82,11 @@ function searchItemOrders()
 {
     var orderID = document.getElementById('itemord-order-id').value;
     var itemID = document.getElementById('itemord-item-id').value;
-    if (orderID == '')
+    if (orderID == 'Any')
     {
         orderID = 'empty';
     }
-    if (itemID == '')
+    if (itemID == 'Any')
     {
         itemID = 'empty';
     }
@@ -165,7 +165,7 @@ function searchCustomers()
     {
         accountStartDate = 'empty';
     }
-    window.location = '/customers/' + encodeURI(customerID) + '/' + encodeURI(firstName) + '/' + encodeURI(lastName) + '/' +encodeURI(email) + '/' + encodeURI(areaCode) + '/' + encodeURI(phoneNumber) + '/' + encodeURI(accountStartDate);
+    window.location = '/customers/' + encodeURI(customerID) + '/' + encodeURI(firstName) + '/' + encodeURI(lastName) + '/' +encodeURI(email) + '/' + encodeURI(phoneNumber) + '/' + encodeURI(areaCode) + '/' + encodeURI(accountStartDate);
 }
 
 function searchTitles()
