@@ -13,10 +13,13 @@ CREATE TABLE `Customers` (
  ) ENGINE=InnoDB AUTO_INCREMENT=1;
 
 LOCK TABLES `Customers` WRITE;
-INSERT INTO `Customers` (firstName, lastName, email, phoneNumber, areaCode, accountStartDate) VALUES ('John', 'Baker', 'johnb@hotmail.com', 541, 0960707, DATE '1996-12-07'),('Alice','Flintstone','alicef@gmail.com',503,2945678,DATE '2017-03-04'),('Colin','Blanch','colinb@yahoo.com',306,7091112,DATE '2018-06-07');
+INSERT INTO `Customers` (firstName, lastName, email, phoneNumber, areaCode, accountStartDate) VALUES 
+                        ('John', 'Baker', 'johnb@hotmail.com', 0960707, 541, DATE '1996-12-07'),
+                        ('Alice','Flintstone','alicef@gmail.com', 2945678, 503, DATE '2017-03-04'),
+                        ('Colin','Blanch','colinb@yahoo.com', 7091112, 306,DATE '2018-06-07');
 UNLOCK TABLES;
 
---create Departments table
+-- create Departments table
 DROP TABLE IF EXISTS `Departments`;
 CREATE TABLE `Departments` (
   `departmentNumber` int NOT NULL UNIQUE AUTO_INCREMENT,
@@ -25,10 +28,13 @@ CREATE TABLE `Departments` (
  );
 
 LOCK TABLES `Departments` WRITE;
-INSERT INTO `Departments` (departmentNumber,departmentName) VALUES (1, 'Pharmacy'),(2,'Produce'),(3,'Deli');
+INSERT INTO `Departments` (departmentNumber,departmentName) VALUES 
+                          (1, 'Pharmacy'),
+                          (2,'Produce'),
+                          (3,'Deli');
 UNLOCK TABLES;
 
---create Items table
+-- create Items table
 DROP TABLE IF EXISTS `Items`;
 CREATE TABLE `Items` (
   `itemID` int AUTO_INCREMENT NOT NULL UNIQUE,
@@ -48,7 +54,7 @@ LOCK TABLES `Items` WRITE;
 INSERT INTO `Items` (itemName,departmentNumber,numberInStock,optimalStock,price) VALUES ('Banana', 2, 124, 200, 0.59),('Ham', 3, 52, 80, 5.59),('Advil', 1, 25, 30, 27.99);
 UNLOCK TABLES;
 
---create Titles table
+-- create Titles table
 DROP TABLE IF EXISTS `Titles`;
 CREATE TABLE `Titles` (
   `title` varchar(255) NOT NULL,
@@ -57,10 +63,13 @@ CREATE TABLE `Titles` (
     );
 
 LOCK TABLES `Titles` WRITE;
-INSERT INTO `Titles` (title, payScale) VALUES ('Manager', 22.00),('Cashier', 14.00),('Store Manager', 30.00);
+INSERT INTO `Titles` (title, payScale) VALUES 
+                     ('Manager', 22.00),
+                     ('Cashier', 14.00),
+                     ('Store Manager', 30.00);
 UNLOCK TABLES;
 
---create Employees table
+-- create Employees table
 
 DROP TABLE IF EXISTS `Employees`;
 CREATE TABLE `Employees` (
@@ -81,10 +90,13 @@ CREATE TABLE `Employees` (
     ) ENGINE=InnoDB AUTO_INCREMENT=1;
 
 LOCK TABLES `Employees` WRITE;
-INSERT INTO `Employees` (firstName, lastName, areacode, phoneNumber, startDate, email, hoursWorked, title) VALUES ('Sam','Smith',503,2440990,DATE '2012-12-12','smiths@gmail.com',40,'Manager'),('Sally','Sampson',541,3091278,DATE '2016-02-20', 'sallys@gmail.com',30,'Cashier'),('Billy','Banks',642,3033030,DATE '2020-10-08','billb@gmail.com',40,'Store Manager');
+INSERT INTO `Employees` (firstName, lastName, areacode, phoneNumber, startDate, email, hoursWorked, title) VALUES 
+                        ('Sam','Smith',503,2440990,DATE '2012-12-12','smiths@gmail.com',40,'Manager'),
+                        ('Sally','Sampson',541,3091278,DATE '2016-02-20', 'sallys@gmail.com',30,'Cashier'),
+                        ('Billy','Banks',642,3033030,DATE '2020-10-08','billb@gmail.com',40,'Store Manager');
 UNLOCK TABLES;
      
---create Orders table
+-- create Orders table
 DROP TABLE IF EXISTS `Orders`;
 
 CREATE TABLE `Orders` (
@@ -105,10 +117,13 @@ CREATE TABLE `Orders` (
     ) ENGINE=InnoDB AUTO_INCREMENT=1;
 
 LOCK TABLES `Orders` WRITE;
-INSERT INTO `Orders` (customerID, employeeID, orderDate, totalPrice) VALUES (1,1,DATE '2018-11-18',6.18),(2,2,DATE '2019-02-02',27.99),(3,3,DATE '2021-09-14',34.17);
+INSERT INTO `Orders` (customerID, employeeID, orderDate, totalPrice) VALUES 
+                     (1,1,DATE '2018-11-18',6.18),
+                     (2,2,DATE '2019-02-02',27.99),
+                     (3,3,DATE '2021-09-14',34.17);
 UNLOCK TABLES;
 
---create ItemOrders table
+-- create ItemOrders table
 DROP TABLE IF EXISTS `ItemOrders`;
 
 CREATE TABLE `ItemOrders` (
@@ -126,5 +141,11 @@ CREATE TABLE `ItemOrders` (
     );
 
 LOCK TABLES `ItemOrders` WRITE;
-INSERT INTO `ItemOrders` (orderID,itemID) VALUES (1,1),(1,2),(2,3),(3,1),(3,2),(3,3);
+INSERT INTO `ItemOrders` (orderID,itemID) VALUES 
+                         (1,1),
+                         (1,2),
+                         (2,3),
+                         (3,1),
+                         (3,2),
+                         (3,3);
 UNLOCK TABLES;

@@ -36,7 +36,7 @@ SELECT title, payScale FROM Titles
 INSERT INTO `Customers` (firstName, lastName, email, phoneNumber, areaCode, accountStartDate) VALUES (:firstNameInput, :lastNameInput, :emailInput, :phoneNumberInput, :areaCodeInput, :accountStartDateInput);
 
 -- adds a row to the Departments table
-INSERT INTO `Departments` (departmentNumber, departmentName) VALUES (:departmentNumberInput, :departmentNameInput);
+INSERT INTO `Departments` (departmentName) VALUES (:departmentNameInput);
 
 -- adds a row to the Items table
 INSERT INTO `Items` (itemName, departmentNumber, numberInStock, optimalStock, price) VALUES (:itemNameInput, :departmentNumberInput, :numberInStockInput, :optimalStockInput, :priceInput);
