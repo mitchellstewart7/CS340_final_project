@@ -279,7 +279,22 @@ module.exports = function(){
         console.log(req.body)
         //console.log(req.params.id)
         var sql = "UPDATE Customers SET firstName=?, lastName=?, email=?, phoneNumber=?, areaCode=?, accountStartDate=? WHERE customerID=?";
-        var inserts = [req.body.firstName, req.body.lastName, req.body.email, req.body.phoneNumber, req.body.areaCode, req.body.accountStartDate, req.params.customerID];
+        if (req.body.phoneNumber == '' && req.body.areaCode == '')
+        {
+            var inserts = [req.body.firstName, req.body.lastName, req.body.email, null, null, req.body.accountStartDate, req.params.customerID];
+        }
+        else if (req.body.phoneNumber == '')
+        {
+            var inserts = [req.body.firstName, req.body.lastName, req.body.email, null, req.body.areaCode, req.body.accountStartDate, req.params.customerID];
+        }
+        else if (req.body.areaCode == '')
+        {
+            var inserts = [req.body.firstName, req.body.lastName, req.body.email, req.body.phoneNumber, null, req.body.accountStartDate, req.params.customerID];
+        }
+        else
+        {
+            var inserts = [req.body.firstName, req.body.lastName, req.body.email, req.body.phoneNumber, req.body.areaCode, req.body.accountStartDate, req.params.customerID];
+        }
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
                 console.log(error)

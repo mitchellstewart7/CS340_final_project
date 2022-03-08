@@ -259,7 +259,7 @@ module.exports = function(){
 
     router.post('/', function(req, res){
         // console.log(req.body.homeworld)
-        console.log(req.body);
+        // console.log(req.body);
         if (req.body.firstName == '' || req.body.lastName == '' || req.body.startDate == '' || req.body.email == '' || req.body.hoursWorked == '' || req.body.title == 'Any')
         {
             res.redirect('/employees');
@@ -300,10 +300,25 @@ module.exports = function(){
 
     router.put('/:employeeID', function(req, res){
         var mysql = req.app.get('mysql');
-        console.log(req.body)
+        //console.log(req.body)
         //console.log(req.params.id)
         var sql = "UPDATE Employees SET firstName=?, lastName=?, areaCode=?, phoneNumber=?, startDate=?, email=?, hoursWorked=?, title=? WHERE employeeID=?";
-        var inserts = [req.body.firstName, req.body.lastName, req.body.areaCode, req.body.phoneNumber, req.body.startDate, req.body.email, req.body.hoursWorked, req.body.title, req.params.employeeID];
+        if (req.body.areaCode == '' && req.body.phoneNumber == '')
+        {
+            var inserts = [req.body.firstName, req.body.lastName, null, null, req.body.startDate, req.body.email, req.body.hoursWorked, req.body.title, req.params.employeeID];
+        }
+        else if (req.body.phoneNumber == '')
+        {
+            var inserts = [req.body.firstName, req.body.lastName, req.body.areaCode, null, req.body.startDate, req.body.email, req.body.hoursWorked, req.body.title, req.params.employeeID];
+        }
+        else if (req.body.areaCode == '')
+        {
+            var inserts = [req.body.firstName, req.body.lastName, null, req.body.phoneNumber, req.body.startDate, req.body.email, req.body.hoursWorked, req.body.title, req.params.employeeID];
+        }
+        else 
+        {
+            var inserts = [req.body.firstName, req.body.lastName, req.body.areaCode, req.body.phoneNumber, req.body.startDate, req.body.email, req.body.hoursWorked, req.body.title, req.params.employeeID];
+        }
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
                 console.log(error)

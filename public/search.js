@@ -13,7 +13,7 @@ function searchOrders()
     {
         customerID = 'empty';
     }
-    if (employeeID == 'Any')
+    if (employeeID == 'Any/NULL')
     {
         employeeID = 'empty';
     }

@@ -56,7 +56,7 @@
             <div class="label-section">
               <label for="employeeID">Employee ID:</label>
               <select id="ord-employee-id" class="order-input" name="employeeID">
-                <option>Any</option>
+                <option>Any/NULL</option>
                 {{#each employees}}
                   <option>{{employeeID}}</option>
                 {{/each}}
@@ -89,6 +89,7 @@
                 <div class="label-section">
                     <label for="employeeID">Employee ID:</label>
                     <select id="update-ord-employee-id" class="order-input" name="employeeID">
+                      <option>None</option>
                       {{#each employees}}
                         <option>{{employeeID}}</option>
                       {{/each}}

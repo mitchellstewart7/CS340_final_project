@@ -247,7 +247,7 @@ module.exports = function(){
         {
             var mysql = req.app.get('mysql');
             var sql = "INSERT INTO Orders (customerID, employeeID, orderDate, totalPrice) VALUES (?,?,?,?)";
-            if (req.body.employeeID == "Any")
+            if (req.body.employeeID == "Any/NULL")
             {
                 var inserts = [req.body.customerID, null, req.body.orderDate, req.body.totalPrice];
             }
@@ -274,7 +274,14 @@ module.exports = function(){
         console.log(req.body)
         //console.log(req.params.id)
         var sql = "UPDATE Orders SET customerID=?, employeeID=?, orderDate=?, totalPrice=? WHERE orderID=?";
-        var inserts = [req.body.customerID, req.body.employeeID, req.body.orderDate, req.body.totalPrice, req.params.orderID];
+        if (req.body.employeeID == "None")
+        {
+            var inserts = [req.body.customerID, null, req.body.orderDate, req.body.totalPrice, req.params.orderID];
+        }
+        else
+        {
+            var inserts = [req.body.customerID, req.body.employeeID, req.body.orderDate, req.body.totalPrice, req.params.orderID];
+        }
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
                 console.log(error)
